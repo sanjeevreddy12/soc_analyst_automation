@@ -1,0 +1,6 @@
+langchain==0.3.17
+langchain-community==0.3.3
+langchain-ollama==0.2.3
+rich==13.7.0
+sentence-transformers==2.5.1
+faiss-cpu==1.10.0
