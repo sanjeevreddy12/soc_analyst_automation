@@ -8,6 +8,8 @@ import LogAnalyzerDashboard from "./components/LogAnalyzerDashboard";
 import Login from "./components/Login";
 import Register from "./components/Register"; // Note: fix the filename on your end
 import AnalysisReportPage from "./components/AnalysisReportPage"
+import RootCauseAnalyzerPage from "./components/RootCauseAnalyzerPage";
+import FileDashboard from "./components/FileDashboard";
 
 export default function App() {
   return (
@@ -44,6 +46,18 @@ export default function App() {
               <AnalysisReportPage/>
             </ProtectedRoute>
           } />
+          <Route path="/file-dashboard" element={
+            <ProtectedRoute>
+              <FileDashboard/>
+              
+                          </ProtectedRoute>
+          } />
+          <Route path="/root-cause-analysis" element={
+           
+              <RootCauseAnalyzerPage/>
+            
+          } />
+
         </Routes>
       </Router>
     </AuthProvider>

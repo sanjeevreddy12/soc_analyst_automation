@@ -14,6 +14,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import { useHistoryManager } from "./HistoryManager";
 import { useLocation, Link, useNavigate } from "react-router-dom";
+import NavBar from "./Navbar";
 
 const ErrorAlert = ({ message }) => (
   <div className="flex items-center gap-2 bg-red-500/10 text-red-400 px-4 py-2 rounded-lg">
@@ -117,6 +118,17 @@ const QuerySuggestion = ({ text, onClick }) => (
 export default function ChatPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [fileId, setFileId] = useState(() => {
+    console.log("Location state:", location.state); // Debug log
+    return location.state?.fileId || localStorage.getItem('currentFileId');
+  });
+  useEffect(() => {
+    console.log("Current fileId:", fileId);
+    if (!fileId) {
+      console.error("No fileId available in state. Check your navigation.");
+    }
+  }, [fileId]);
+  
   // const { updateHistory } = useHistoryManager();
   const historyId = location.state?.historyId;
 
@@ -153,12 +165,15 @@ export default function ChatPage() {
 
   const queryRAG = async (query) => {
     try {
+      const token = localStorage.getItem('token');
+      console.log("Sending query with fileId:", fileId); 
       const response = await fetch("http://localhost:8000/query", {
         method: "POST",
         headers: {
+           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query,file_id: fileId,use_enhanced:true }),
       });
 
       if (!response.ok) throw new Error(`API Error: ${response.status}`);
@@ -172,17 +187,17 @@ export default function ChatPage() {
   const generateReport = async () => {
     try {
       setIsGeneratingReport(true);
-      // Get the initial analysis from the backend
-      const response = await fetch("http://localhost:8000/initial-analysis");
+      
+      const response = await fetch(`http://localhost:8000/initial-analysis/${fileId}`);
       
       if (!response.ok) throw new Error(`API Error: ${response.status}`);
       
       const analysisData = await response.json();
       
-      // Navigate to the report page with the analysis data
+      
       navigate("/report", {
         state: {
-          fileName: "security_logs.log", // You can customize this based on your needs
+          fileName: location.state?.fileName, 
           analysis: analysisData
         }
       });
@@ -242,35 +257,31 @@ export default function ChatPage() {
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-b from-gray-900 to-gray-800">
-      <header className="border-b border-gray-700 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <NavBar />
+      
+      <header className="border-b border-gray-700 bg-gray-900/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <a
-                href="/"
+            <div className="flex items-center gap-2">
+              <Link
+                to="/file-dashboard"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />
-                <span>Back</span>
-              </a>
-              <div className="flex items-center gap-3">
-                <FileText className="w-5 h-5 text-blue-400" />
-                <h1 className="text-lg font-semibold text-white">
-                  Security Log Analysis
-                </h1>
-              </div>
-              <div className="flex items-center gap-2">
-                <Link
-                  to="/dashboard"
-                  className="flex items-center gap-2 text-gray-400 hover:text-white"
-                >
-                  <Clock className="w-5 h-5" />
-                  View Dashboard
-                </Link>
-              </div>
+                <span>Back to Dashboard</span>
+              </Link>
+              
+              {location.state?.fileName && (
+                <div className="flex items-center gap-2 ml-4 pl-4 border-l border-gray-700">
+                  <FileText className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-200">{location.state.fileName}</span>
+                </div>
+              )}
             </div>
+            
             <div className="flex items-center gap-4">
               {error && <ErrorAlert message={error} />}
+              
               <button
                 onClick={generateReport}
                 disabled={isGeneratingReport || messages.length < 2}

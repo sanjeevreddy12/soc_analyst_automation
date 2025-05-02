@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Shield, LogOut, User, Home, MessageSquare, History, BarChart2 } from 'lucide-react';
 import { useAuth } from './AuthContext';
+import { FileSearch } from 'lucide-react';
 
 const NavBar = () => {
   const { user, logout } = useAuth();
@@ -44,11 +45,18 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/root-cause-analysis" className="text-gray-300 hover:text-white flex items-center gap-2">
+                  <FileSearch className="w-4 h-4" />
+                  Root Cause
+                </Link>
+              </li>
+
+              {/* <li>
                 <Link to="/history" className="text-gray-300 hover:text-white flex items-center gap-2">
                   <History className="w-4 h-4" />
                   History
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
           

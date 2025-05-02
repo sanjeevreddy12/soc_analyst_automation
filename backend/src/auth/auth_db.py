@@ -78,5 +78,4 @@ def create_user(username, email, hashed_password, full_name=None):
     conn.close()
     return result
 
-# Initialize the database when the module is imported
 init_db()

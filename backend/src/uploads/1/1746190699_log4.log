@@ -1,0 +1,37 @@
+2023-04-15T08:23:45Z INFO [system.auth] User john.doe successfully logged in from IP 192.168.1.105
+2023-04-15T08:34:16Z INFO [system.access] User john.doe accessed file /secure/financial-report-2023.pdf
+2023-04-15T09:12:33Z WARNING [system.auth] User maria.smith failed login attempt from IP 203.0.113.42
+2023-04-15T09:13:05Z WARNING [system.auth] User maria.smith failed login attempt from IP 203.0.113.42
+2023-04-15T09:13:38Z WARNING [system.auth] User maria.smith failed login attempt from IP 203.0.113.42
+2023-04-15T09:14:10Z CRITICAL [system.auth] User maria.smith account locked after 3 failed login attempts from IP 203.0.113.42
+2023-04-15T10:45:22Z INFO [system.config] System configuration updated by admin.user
+2023-04-15T11:30:15Z ERROR [system.app] Application crash in module payment-processor, error code ERR_MEMORY_LEAK
+2023-04-15T11:32:45Z INFO [system.app] Application payment-processor restarted by system
+2023-04-15T13:15:10Z WARNING [network.traffic] Unusual outbound traffic detected from 192.168.1.105 to 87.230.14.89
+2023-04-15T13:16:30Z WARNING [network.traffic] Large data transfer (450MB) from 192.168.1.105 to 87.230.14.89
+2023-04-15T13:20:05Z ALERT [security.ids] Potential data exfiltration detected from user john.doe, IP 192.168.1.105
+2023-04-15T13:21:30Z INFO [system.auth] User john.doe logged out
+2023-04-15T14:05:22Z INFO [system.auth] User admin.user successfully logged in from IP 192.168.1.10
+2023-04-15T14:10:05Z INFO [system.privilege] User admin.user elevated to root access
+2023-04-15T14:11:30Z INFO [system.config] Firewall rules updated by admin.user
+2023-04-15T14:15:45Z INFO [system.config] New scheduled task created by admin.user: daily-backup
+2023-04-15T14:20:10Z INFO [system.auth] User admin.user logged out
+2023-04-15T16:45:33Z ERROR [system.storage] Disk space critical on /var/log (95% full)
+2023-04-15T17:30:22Z INFO [system.maintenance] Log rotation initiated
+2023-04-15T17:35:10Z INFO [system.maintenance] Old logs archived successfully
+2023-04-15T18:23:45Z WARNING [security.scan] Malware scanner detected suspicious file in /tmp/update-package.zip
+2023-04-15T18:25:30Z ALERT [security.scan] Virus signature "TROJAN.FAKEUPDATER" detected in file /tmp/update-package.zip
+2023-04-15T18:26:15Z INFO [security.scan] Infected file quarantined: /tmp/update-package.zip
+2023-04-15T19:45:10Z INFO [system.auth] User jane.wilson successfully logged in from IP 192.168.1.120
+2023-04-15T20:10:25Z INFO [system.access] User jane.wilson accessed file /secure/employee-data.xlsx
+2023-04-15T20:15:33Z INFO [system.access] User jane.wilson accessed file /secure/salary-info-2023.xlsx
+2023-04-15T20:30:45Z INFO [system.auth] User jane.wilson logged out
+2023-04-15T22:15:30Z WARNING [system.auth] Failed login attempt for non-existent user admin from IP 45.136.108.15
+2023-04-15T22:15:45Z WARNING [system.auth] Failed login attempt for non-existent user administrator from IP 45.136.108.15
+2023-04-15T22:16:10Z WARNING [system.auth] Failed login attempt for user root from IP 45.136.108.15
+2023-04-15T22:16:35Z WARNING [system.auth] Failed login attempt for user admin from IP 45.136.108.15
+2023-04-15T22:17:42Z ALERT [security.ids] Potential brute force attack detected from IP 45.136.108.15
+2023-04-15T22:18:10Z INFO [system.firewall] IP 45.136.108.15 automatically blocked for 24 hours
+2023-04-15T23:45:22Z INFO [system.monitoring] Daily system health check: PASSED
+2023-04-15T23:50:15Z INFO [system.backup] Daily backup completed successfully
+2023-04-15T23:59:59Z INFO [system.monitoring] All services operational at day end

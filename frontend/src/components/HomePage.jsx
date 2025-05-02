@@ -3,12 +3,8 @@ import { Upload, Shield, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LoadingOverlay } from "./LoadingComponents";
 import { CustomAlert } from "./CustomAlert";
-// import { useLogData } from "./LogDataContext";
-// import { useProcessing } from "../context/ProcessingContext";
-// import { useHistoryManager } from './HistoryManager';
 
 const HomePage = () => {
-  // const { addToHistory } = useHistoryManager();
   const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState(null);
@@ -16,9 +12,6 @@ const HomePage = () => {
   const [success, setSuccess] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  // const { processLogFile } = useLogData();
-  // const { startProcessing, processingState } = useProcessing();
-  // const { isProcessing, curStep, err, done } = processingState;
 
   const acceptedFileTypes = [".csv", ".log", ".txt", ".md"];
 
@@ -64,51 +57,57 @@ const HomePage = () => {
 
   const uploadFile = async (file) => {
     try {
-      // const success = await startProcessing(file);
+      const formData = new FormData();
+      formData.append("file", file);
 
-      if (true) {
-        const formData = new FormData();
-        formData.append("file", file);
+      try {
+        setIsUploading(true);
+        setError("");
+        setSuccess("");
 
-        try {
-          setIsUploading(true);
-          setError("");
-          setSuccess("");
+        // Start processing animation
+        simulateProcessingSteps();
+        const token = localStorage.getItem('token');
 
-          // Start processing animation
-          // await processLogFile(file);
+        const response = await fetch("http://localhost:8000/upload", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          },
+          body: formData,
+        });
 
-          simulateProcessingSteps();
+        if (!response.ok) {
+          throw new Error(`Upload failed: ${response.statusText}`);
+        }
 
-          const response = await fetch("http://localhost:8000/upload", {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!response.ok) {
-            throw new Error(`Upload failed: ${response.statusText}`);
-          }
-
-          const data = await response.json();
-          // addToHistory(file);
-          if (data.message.includes("successfully processed")) {
-            setSuccess(
-              "File processed successfully! RAG model is ready for queries."
-            );
-            // Wait for state updates to complete
-            setTimeout(() => {
-              navigate("/chat", { state: { fileName: file.name } });
-            }, 1000);
-          }
-        } catch (err) {
-          setError(`Upload failed: ${err.message}`);
-          setFile(null);
-        } finally {
+        const data = await response.json();
+        
+        if (data.message.includes("successfully processed")) {
+          setSuccess(
+            "File processed successfully! Redirecting to dashboard..."
+          );
+          localStorage.setItem('currentFileId', data.file_id);
+          localStorage.setItem('currentFileName', file.name);
+          // Wait for state updates to complete
           setTimeout(() => {
-            setIsUploading(false);
-            setCurrentStep(0);
+            // Navigate to file dashboard instead of chat
+            navigate("/file-dashboard", { 
+              state: { 
+                fileName: file.name,
+                fileId: data.file_id 
+              } 
+            });
           }, 1000);
         }
+      } catch (err) {
+        setError(`Upload failed: ${err.message}`);
+        setFile(null);
+      } finally {
+        setTimeout(() => {
+          setIsUploading(false);
+          setCurrentStep(0);
+        }, 1000);
       }
     } catch (err) {
       console.error("Upload failed:", err);
@@ -139,7 +138,6 @@ const HomePage = () => {
     }
   };
   
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8">
       {isUploading && (
@@ -210,7 +208,7 @@ const HomePage = () => {
 
         {/* Status Messages */}
         {error && <CustomAlert message={error} type="error" />}
-        {success && navigate("/chat")}
+        {success && <CustomAlert message={success} type="success" />}
 
         {/* Features Section */}
         <div className="grid md:grid-cols-3 gap-8 mt-16">

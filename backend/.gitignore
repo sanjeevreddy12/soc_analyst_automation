@@ -2,3 +2,7 @@ venv/
 __pycache__
 db/
 __init__.py
+visualizations/
+
+evaluation_results
+evaluation_viz

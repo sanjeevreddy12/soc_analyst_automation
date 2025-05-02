@@ -134,7 +134,7 @@ const LogAnalyzerDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <Link
-              to="/"
+              to="/chat"
               className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
